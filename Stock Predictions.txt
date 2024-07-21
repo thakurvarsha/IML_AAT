@@ -1,0 +1,37 @@
+
+
+def printTransactions(money, k, d, names, owned, prices):
+    res = []
+    for i in range(k):
+        name = names[i]
+        num_owned = owned[i]
+        price = prices[i]
+        price_change = (price[-1] - price[-2]) / price[-2]
+        if price_change > 0.0 and num_owned > 0:
+            res.append((name, 'SELL', str(num_owned)))
+        elif price_change < 0.0:
+            amount_to_buy = int(money / price[-1])
+            if amount_to_buy > 0:
+                res.append((name, 'BUY', str(amount_to_buy)))
+                money -= amount_to_buy * price[-1]
+    print(len(res))
+    for transaction in res:
+        print(' '.join(transaction))
+if __name__ == "__main__":
+    import sys
+    input = sys.stdin.read
+    data = input().strip().split('\n')
+    m, k, d = map(float, data[0].split())
+    m = float(m)
+    k = int(k)
+    d = int(d)
+    names = []
+    owned = []
+    prices = []
+    for i in range(k):
+        line = data[i + 1].strip().split()
+        names.append(line[0])
+        owned.append(int(line[1]))
+        prices.append(list(map(float, line[2:])))
+    printTransactions(m, k, d, names, owned, prices)
+     
